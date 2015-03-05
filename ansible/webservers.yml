@@ -1,0 +1,7 @@
+---
+- hosts: webservers
+  roles:
+    - jasperreports-server
+    - nginx-config
+    - slack
+  remote_user: "{{ ansible_user }}"
