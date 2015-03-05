@@ -1,5 +1,4 @@
 #!/usr/bin/expect
-
 spawn /opt/jasperreports-server_dev/jasper-server-ce-installer.run
 
 expect "Press"

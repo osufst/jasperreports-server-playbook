@@ -1,5 +1,6 @@
 ---
-ansible_user: jasperreports
+ansible_user: root # couldn't authenticate with jasperreports user, because it hasn't been created
 appname: jasperreports-server
 jasperreports_server_version: HEAD
+node_env: development
 prefix: /opt/jasperreports-server_dev
