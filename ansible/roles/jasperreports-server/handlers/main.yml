@@ -1,0 +1,4 @@
+---
+- name: restart jasperreports-server
+  service: name={{ appname }}_{{ node_env }} state=restarted
+  sudo: yes
