@@ -1,0 +1,5 @@
+---
+ansible_user: jasperreports
+appname: jasperreports-server
+jasperreports_server_version: HEAD
+prefix: /opt/jasperreports-server_dev

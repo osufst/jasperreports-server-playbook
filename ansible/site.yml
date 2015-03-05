@@ -1,0 +1,11 @@
+---
+- hosts: all
+  roles:
+    - application-user
+    - sles-sdk
+    - vmware-tools
+  tags:
+    - reports
+  remote_user: root
+
+- include: webservers.yml

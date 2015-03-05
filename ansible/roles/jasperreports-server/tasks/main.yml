@@ -1,23 +1,24 @@
 ---
-tasks:
- - name: Download Jasper Server CE Installer
-   get_url: url=http://sourceforge.net/projects/jasperserver/files/JasperServer/JasperReports%20Server%20Community%20Edition%206.0.1/jasperreports-server-cp-6.0.1-linux-x64-installer.run/download
-             dest=/opt/jasper-server-ce-installer.run
-             validate_certs=no
- - name: Add permission to execute Jasper Server CE Installer
-   file: path=/opt/jasper-server-ce-installer.run
-          mode=0755
- - name: Run the Jasper Server CE Installer
-   command: /opt/ansible/test/units/inventory_test_data/jasper_setup_expect.sh
-             creates=/opt/jasperreports-server-cp-6.0.1/ctlscript.sh
- - name: Edit the startup script for Tomcat so it detaches from tty properly
-   lineinfile: dest=/opt/jasperreports-server-cp-6.0.1/apache-tomcat/scripts/ctl.sh
-                regexp="\$TOMCAT_BINDIR/startup.sh"
-                line="nohup $TOMCAT_BINDIR/startup.sh"
-                backrefs=yes
- - name: Start/restart the Jasper Server
-   command: ./ctlscript.sh restart
-             chdir=/opt/jasperreports-server-cp-6.0.1
+- name: check out jasperreports-server source
+  git: repo=
+- name: download Jasper Server CE Installer
+  get_url: url=http://sourceforge.net/projects/jasperserver/files/JasperServer/JasperReports%20Server%20Community%20Edition%206.0.1/jasperreports-server-cp-6.0.1-linux-x64-installer.run/download
+            dest=/opt/jasper-server-ce-installer.run
+            validate_certs=no
+- name: add permission to execute Jasper Server CE Installer
+  file: path=/opt/jasper-server-ce-installer.run
+         mode=0755
+- name: run the Jasper Server CE Installer
+  command: /opt/ansible/test/units/inventory_test_data/jasper_setup_expect.sh
+            creates=/opt/jasperreports-server-cp-6.0.1/ctlscript.sh
+- name: edit the startup script for Tomcat so it detaches from tty properly
+  lineinfile: dest=/opt/jasperreports-server-cp-6.0.1/apache-tomcat/scripts/ctl.sh
+               regexp="\$TOMCAT_BINDIR/startup.sh"
+               line="nohup $TOMCAT_BINDIR/startup.sh"
+               backrefs=yes
+- name: start/restart the Jasper Server
+  command: ./ctlscript.sh restart
+            chdir=/opt/jasperreports-server-cp-6.0.1
 
 
 
