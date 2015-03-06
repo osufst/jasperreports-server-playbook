@@ -3,13 +3,6 @@
   file: path={{ prefix }} owner={{ ansible_user }} group=www state=directory
   sudo: yes
 
-# Put this stuff back in once you have private repository to push to; right now, repo won't have authorization info because repo is public
-# Also, this was copying the playbook files into jasperreports-server_dev, will need to fix that.
-#- name: check out jasperreports-server source
-#  git: repo=https://github.com/osufst/jasperreports-server-playbook.git dest={{ prefix }} version={{ jasperreports_server_version }} accept_hostkey=true
-#  notify:
-#    - restart jasperreports-server
-
 - name: download Jasper Server CE Installer
   get_url: url=http://sourceforge.net/projects/jasperserver/files/JasperServer/JasperReports%20Server%20Community%20Edition%206.0.1/jasperreports-server-cp-6.0.1-linux-x64-installer.run/download
             dest={{ prefix }}/jasper-server-ce-installer.run validate_certs=no #url_username= url_password=
@@ -23,5 +16,10 @@
 - name: edit the startup script for Tomcat so it detaches from tty properly
   lineinfile: dest={{ prefix }}/jasperreports-server-cp-6.0.1/apache-tomcat/scripts/ctl.sh regexp="\$TOMCAT_BINDIR/startup.sh" line="nohup $TOMCAT_BINDIR/startup.sh" backrefs=yes
 
-- name: start/restart the Jasper Server
+- name: check the status of the Jasper Server
+  command: ./ctlscript.sh status chdir={{ prefix }}/jasperreports-server-cp-6.0.1
+  register: server_status
+
+- name: start/restart the Jasper Server if postgres/tomcat not running
   command: ./ctlscript.sh restart chdir={{ prefix }}/jasperreports-server-cp-6.0.1
+  when: server_status.stdout=="tomcat not running\npostgresql not running"
