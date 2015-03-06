@@ -1,2 +1,2 @@
-#!/bin/sh
-ansible-playbook -i production.ini site.yml -K
+#!/usr/bin/sh
+ansible-playbook -i production.ini site.yml --ask-pass
