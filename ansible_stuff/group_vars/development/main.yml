@@ -1,5 +1,5 @@
 ---
-ansible_user: jasperreports
+ansible_user: root
 appname: jasperreports-server
 jasperreports_server_version: HEAD
 node_env: development
