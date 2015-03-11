@@ -8,13 +8,16 @@
             dest={{ prefix }}/jasper-server-ce-installer.run validate_certs=no #url_username= url_password=
 
 - name: add permission to execute Jasper Server CE Installer
-  file: path={{ prefix }}/jasper-server-ce-installer.run mode=0755
+  file: path={{ prefix }}/jasper-server-ce-installer.run mode=0755 owner=root
+  sudo: yes
 
 - name: run the Jasper Server CE Installer
-  script: ../files/jasper_setup_expect.sh creates={{ prefix }}/jasperreports-server-cp-6.0.1/ctlscript.sh
+  script: ../files/jasper_setup_expect.exp creates={{ prefix }}/jasperreports-server-cp-6.0.1/ctlscript.sh
+  sudo: yes
 
 - name: edit the startup script for Tomcat so it detaches from tty properly
   lineinfile: dest={{ prefix }}/jasperreports-server-cp-6.0.1/apache-tomcat/scripts/ctl.sh regexp="\$TOMCAT_BINDIR/startup.sh" line="nohup $TOMCAT_BINDIR/startup.sh" backrefs=yes
+  sudo: yes
 
 - name: check the status of the Jasper Server
   command: ./ctlscript.sh status chdir={{ prefix }}/jasperreports-server-cp-6.0.1
@@ -23,4 +26,5 @@
 
 - name: start/restart the Jasper Server if postgres/tomcat not running
   command: ./ctlscript.sh restart chdir={{ prefix }}/jasperreports-server-cp-6.0.1
-  when: server_status.stdout=="tomcat not running\npostgresql not running"
+  when: server_status.stdout!="tomcat already running\npostgresql already running"
+  sudo: yes
